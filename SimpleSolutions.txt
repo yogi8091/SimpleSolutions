@@ -2,7 +2,7 @@ Simple Solutions
 ===============================================
 
 1.
-HOw do I Give VLANs internet access?
+How do I give VLANs internet access?
 <Soln>
 https://askubuntu.com/questions/1003592/how-do-i-give-vlans-internet-access
 
@@ -11,3 +11,9 @@ iptables -t filter -A FORWARD -o eno1.25 -m comment --comment "NAT for eno1.25" 
 iptables -t filter -A FORWARD -i eno1.25 -m comment --comment "NAT for eno1.25" -j ACCEPT
 
 2.
+How to list down the packages of pip
+<Soln>
+https://note.nkmk.me/en/python-package-version/
+
+pip3 list | grep -i yaml
+PyYAML                   3.12
