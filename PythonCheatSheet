@@ -1,0 +1,6 @@
+1.
+List all attributes of an object:
+---------------------------------------------------------
+(https://stackoverflow.com/questions/6886493/get-all-object-attributes-in-python)
+for att in dir(your_object):
+    print (att, getattr(your_object,att))
