@@ -1,0 +1,26 @@
+1.
+How to get top-level protobuf enum value name by number in python?
+---------------------------------------------------------------------------
+(https://stackoverflow.com/questions/11502113/how-to-get-top-level-protobuf-enum-value-name-by-number-in-python)
+
+enum Test {
+  ONE = 1;
+  TWO = 2;
+}
+
+file_pb2.Test.Name(1)
+file_pb2.Test.Value('One')
+
+2.
+Check if Singular field exists
+------------------------------------------------------------------------
+message Number {
+    float  value = 1;
+    uint32 o_desc = 2;               
+    string check_msg = 3;
+    Shapes shapes = 4;
+    repeated Action actionSpec = 5;
+}
+
+For 'o_desc' -> x = list(filter(lambda fields: 'o_desc' == fields[0].name, request.ListFields()))
+for  'shapes' -> "if request.shapes.length" or len(request.shapes.ListFields()) > 0
