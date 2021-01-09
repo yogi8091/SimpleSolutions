@@ -1,0 +1,79 @@
+
+yogeshp@ubuntu-pc-exp:~/NGAP/FOLLY$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 18.04.5 LTS
+Release:        18.04
+Codename:       bionic
+yogeshp@ubuntu-pc-exp:~/NGAP/FOLLY$
+
+echo "Install dependencies"
+echo "--------------------------------------------------"
+sudo apt-get install \
+    g++ \
+    cmake \
+    libboost-all-dev \
+    libevent-dev \
+    libdouble-conversion-dev \
+    libgoogle-glog-dev \
+    libgflags-dev \
+    libiberty-dev \
+    liblz4-dev \
+    liblzma-dev \
+    libsnappy-dev \
+    make \
+    zlib1g-dev \
+    binutils-dev \
+    libjemalloc-dev \
+    libssl-dev \
+    pkg-config \
+    libunwind-dev
+
+echo "Install fmt"
+echo "--------------------------------------------------"
+git clone https://github.com/fmtlib/fmt.git && cd fmt
+
+mkdir _build && cd _build
+cmake ..
+make -j $(nproc)
+make install # with either sudo or DESTDIR as necessary
+
+make -j$(nproc)
+sudo make install
+
+echo "Advanced debugging features"
+echo "--------------------------------------------------"
+sudo apt-get install \
+    libunwind8-dev \
+    libelf-dev \
+    libdwarf-dev
+
+
+
+echo "Installing facebook folly"
+echo "--------------------------------------------------"
+git clone https://github.com/facebook/folly.git
+cd folly
+mkdir _build
+cd _build
+cmake ..
+make
+sudo make install
+
+
+'
+/////////////////////////////////////////
+#include <iostream>
+#include <folly/FBString.h>
+
+using namespace std;
+
+int main()
+{
+    cout << " COMPILE : g++ <PGM>.cc -o <PGM> -lfolly" << endl;
+    folly::fbstring str("Hello, Folly World !");
+    std::cout << str << "\n";
+
+    return (0);
+}
+'
