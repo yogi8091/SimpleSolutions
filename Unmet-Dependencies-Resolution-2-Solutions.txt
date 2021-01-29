@@ -1,0 +1,75 @@
+
+1. SOLUTION-1 : Create the DEB Package
+(Reference : https://linuxconfig.org/easy-way-to-create-a-debian-package-and-local-package-repository)	
+***************************************************************************************************
+
+Compile latest dnsmasq
+============================================================================
+wget http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.84.tar.gz
+tar -xzf dnsmasq-2.84.tar.gz
+cd dnsmasq-2.84
+make && sudo make install
+Binary will be stored in : /home/magma/dnsmasq-2.84/src/dnsmasq
+
+Create the Debian Package
+============================================================================
+sudo apt-get purge --remove dnsmasq-2.84
+mkdir -p dnsmasq-2.84/usr/bin/
+cp /home/magma/dnsmasq-2.84/src/dnsmasq dnsmasq-2.84/usr/bin/ <<<< "/usr/bin" : Path where binary will be installed in the system.
+
+a. Sample
+-----------------------------------------------------------------------------
+magma@magma:~/dnsmasq-2.84/src/dnsmasq-2.84$ ls
+DEBIAN  usr
+magma@magma:~/dnsmasq-2.84/src/dnsmasq-2.84$
+
+b. Create the Control File
+------------------------------------------------------------------------------
+magma@magma:~/dnsmasq-2.84/src/dnsmasq-2.84/DEBIAN$ ls
+control
+
+magma@magma:~/dnsmasq-2.84/src/dnsmasq-2.84/DEBIAN$ cat control
+Package: dnsmasq
+Version: 2.84
+Section: custom
+Priority: optional
+Architecture: amd64
+Essential: no
+Installed-Size: 383016
+Maintainer: <vagrant@magma-dev>
+Description: Print dnsmasq package on the screen
+magma@magma:~/dnsmasq-2.84/src/dnsmasq-2.84/DEBIAN$
+
+c. Create the debain package
+-------------------------------------------------------------------------------
+cd ../..
+magma@magma:~/dnsmasq-2.84/src/
+dpkg-deb --build dnsmasq-2.84
+
+magma@magma:~/dnsmasq-2.84/src$ ls dnsmasq-2.84*
+dnsmasq-2.84.deb
+
+dnsmasq-2.84:
+DEBIAN  usr
+magma@magma:~/dnsmasq-2.84/src$
+
+d. Install the package
+---------------------------------------------------------------------------------
+sudo apt-get -f install /home/magma/dnsmasq-2.84/src/dnsmasq-2.84.deb
+
+
+
+
+
+2. SOLUTION-2 : Remove the dependecies
+(References : https://serverfault.com/questions/250224/how-do-i-get-apt-get-to-ignore-some-dependencies)
+***************************************************************************************************
+ ar x magma_1.4.0-1610601600-2ee01136_amd64.deb
+ ls
+ tar xzf control.tar.gz
+ ls -lrt
+ vim control  <<<<<<<<<<<< Remove the package having unmet dependencies
+ ls -lrt
+ tar --ignore-failed-read -cvzf control.tar.gz {post,pre}{inst,rm} md5sums control
+ ls -lrt
+ ar rcs newpackage.deb debian-binary control.tar.gz data.tar.gz
